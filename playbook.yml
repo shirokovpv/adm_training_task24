@@ -51,7 +51,7 @@
   - name: ensure named is running and enabled
     service: name=named state=restarted enabled=yes
     
-- hosts: client
+- hosts: client,client2
   become: yes
   tasks:
   - name: copy resolv.conf to the client
