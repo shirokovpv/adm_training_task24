@@ -38,15 +38,20 @@
 <p>Получим каталог ~/task24/vagrant-bind и перейдем туда:</p>
 <img width="813" height="495" alt="image" src="https://github.com/user-attachments/assets/82ed1e9f-db63-4c3a-aedc-8094b78b6f2c" />
 <p>&nbsp;</p>
-<p>Изменим Vagrantfile в соответствии с заданием и нашим обходным решением. Измененный файл прикладываю сюда.</p>
+<p>Изменим Vagrantfile в соответствии с заданием (добавить еще один сервер client2) и нашим обходным решением. Измененный файл прикладываю сюда.</p>
 <img width="910" height="864" alt="image" src="https://github.com/user-attachments/assets/e0cd8a95-7a35-4401-8a6d-b57ac6c51bf1" />
 <p>&nbsp;</p>
-<p><span style="font-weight: 300;">Vagranfile описывает создание 4 виртуальных машин на CentOS 7, каждой машине будет выделено по 256 МБ ОЗУ. В начале файла есть модуль, который отвечает за настройку ВМ с помощью Ansible. </span></p>
-<p>*********</p>
+<p><span style="font-weight: 300;">Vagranfile описывает создание 4 виртуальных машин на CentOS 7, каждой машине будет выделено по 256 МБ ОЗУ. В начале файла есть модуль, который отвечает за настройку ВМ с помощью Ansible (запускается плейбук из каталога provisioning). </span></p>
 <p>Поскольку мы используем "левый" репозиторий Vagrant со старыми дистрибутивами ОС (см.выше), на этих ВМ необходимо запустить следующие команды, иначе пакеты не будут устанавливаться:</p>
 <pre>sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*<br />sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*<br /></pre>
-<p>Установка пакетов производится в этом стенде с помощью Ansible, поэтому надо добавить эти команды в плейбук. Измененный плейбук также прикладываю сюда</p>
-<p>*********</p>
+<p>Установка пакетов производится в этом стенде с помощью Ansible, поэтому надо добавить эти команды в плейбук. Также в плейбуке для настройки второго клиента нужно в раздел hosts добавить client2. Не будем устанавливать ntp и просто запустим службу chronyd (внесем в плейбук соответствующие изменения). Измененный плейбук также прикладываю сюда.</p>
+<p><span style="font-weight: 300;">В каталоге provisoning находятся также файлы для дополнительной настройки (их использует Ansible-плейбук)</span><span style="font-weight: 300;">:</span></p>
+<ul>
+<li style="font-weight: 400;"><span style="font-weight: 300;">client-motd &mdash; файл, содержимое которого будет появляться перед пользователем, который подключился по SSH</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 300;">named.ddns.lab и named.dns.lab &mdash; файлы описания зон ddns.lab и dns.lab соответсвенно</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 300;">master-named.conf и slave-named.conf &mdash; конфигурационные файлы, в которых хранятся настройки DNS-сервера</span></li>
+<li style="font-weight: 400;"><span style="font-weight: 300;">client-resolv.conf и servers-resolv.conf &mdash; файлы, в которых содержатся IP-адреса DNS-серверов</span></li>
+</ul>
 <p><span style="font-weight: 300;">После внесения изменений, можно попробовать развернуть наши ВМ, для этого нужно воспользоваться командой: </span><code>vagrant up</code>; увидим, что создано 4 ВМ.</p>
 
 
